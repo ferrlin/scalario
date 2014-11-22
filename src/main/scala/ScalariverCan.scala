@@ -6,8 +6,9 @@ import spray.can.Http
 
 object ScalariverCan extends App {
 
-  val system = ActorSystem("Scalariver")
-  val handler = system.actorOf(Props[FormattingHandler], named="formattingservice")
+  implicit val river = ActorSystem("Scalariver")
+
+  val handler = river.actorOf(Props[FormattingHandler], name = "formattingservice")
 
   IO(Http) ! Http.Bind(handler, interface = "localhost", port = 8098)
 
