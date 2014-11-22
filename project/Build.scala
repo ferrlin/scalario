@@ -7,10 +7,11 @@ object ScalariverProject extends Build {
     organization := "com.github.ornicar",
     name := "scalariver",
     version := "1.0",
-    scalaVersion := "2.10.3",
+    scalaVersion := "2.10.4",
     resourceDirectories in Compile := List(),
     libraryDependencies := Seq(
-      "org.gnieh" %% "tiscaf" % "0.8",
+      "io.spray" %% "spray-can" % "1.3.2",
+      "io.spray" %% "spray-routing" % "1.3.2",
       "org.scalariform" %% "scalariform" % "0.1.4"),
     resolvers := Seq(
       "sonatype" at "http://oss.sonatype.org/content/repositories/releases",
