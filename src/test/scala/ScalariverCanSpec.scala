@@ -25,7 +25,8 @@ class ScalariverCanSpec extends Specification with Specs2RouteTest with Formatti
     }
   }
   """
-  val expTest2 = """object Test2 {
+  val expTest2 = """
+  object Test2 {
     def sayYes(p: String) = p match {
       case "Yes" ⇒ "Im saying yes"
       case _ ⇒ "Nah,"
