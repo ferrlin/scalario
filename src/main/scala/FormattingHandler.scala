@@ -30,7 +30,7 @@ trait FormattingService extends HttpService {
       val allParams = formData.fields.toMap
       val source = allParams get "source"
       val version = allParams getOrElse ("scalaVersion", "2.10")
-      val Some(indentLevel: Int) = allParams getOrElse ("initialIndentLevel", 0)
+      val Some(indentLevel: Int) = Some((allParams getOrElse ("initialIndentLevel", "0")) toInt)
       lazy val preferences = new FormattingPreferences(
         AllPreferences.preferencesByKey map {
           case (key, descriptor) ⇒
