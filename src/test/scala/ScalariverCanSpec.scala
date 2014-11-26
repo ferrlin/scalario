@@ -4,6 +4,8 @@ import org.specs2.mutable.Specification
 import spray.testkit.Specs2RouteTest
 import spray.http.StatusCodes._
 import spray.http.FormData
+import spray.routing.MethodRejection
+import spray.http.HttpMethods._
 
 class ScalariverCanSpec extends Specification with Specs2RouteTest with FormattingService {
 
@@ -31,18 +33,16 @@ class ScalariverCanSpec extends Specification with Specs2RouteTest with Formatti
       Post("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "0", "rewriteArrowSymbols" -> "true"))) ~>
         myRoute ~> check {
           val output = responseAs[String]
-          println(output)
           output === expTest2
         }
     }
   }
 
   "The service" should {
-    "not response to a GET request and return formatted source code" in {
+    "not respond to a GET request" in {
       Get("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "2", "rewriteArrowSymbols" -> "true"))) ~>
         myRoute ~> check {
-          val output = responseAs[String]
-          output === expTest2
+          rejections === List(MethodRejection(POST))
         }
     }
   }

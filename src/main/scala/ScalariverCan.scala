@@ -13,7 +13,7 @@ object ScalariverCan extends App {
 
   IO(Http) ! Http.Bind(handler, interface = "localhost", port = 8098)
 
-  IO(Http) ! Http.Bind(staticHandler, interface = "localhost", port = 8098)
+  // IO(Http) ! Http.Bind(staticHandler, interface = "localhost", port = 8098)
 
 }
 
@@ -78,18 +78,22 @@ trait FormattingService extends HttpService {
   import FormattingService._
 
   def formatRoute =
-    entity(as[FormData]) { formData ⇒
-      implicit val allParams = formData.fields.toMap
-      val source = allParams get SOURCE_FIELD
-      val version = allParams getOrElse (SCALA_VERSION, "2.10")
-      val Some(indentLevel: Int) = Some((allParams getOrElse (INDENT_LEVEL, "0")) toInt)
-      lazy val preferences = new FormattingPreferences(formatPreferences.toMap)
-      complete {
-        Try(ScalaFormatter.format(
-          source = source.get,
-          scalaVersion = version,
-          formattingPreferences = preferences,
-          initialIndentLevel = indentLevel))
+    path("") {
+      post {
+        entity(as[FormData]) { formData ⇒
+          implicit val allParams = formData.fields.toMap
+          val source = allParams get SOURCE_FIELD
+          val version = allParams getOrElse (SCALA_VERSION, "2.10")
+          val Some(indentLevel: Int) = Some((allParams getOrElse (INDENT_LEVEL, "0")) toInt)
+          lazy val preferences = new FormattingPreferences(formatPreferences.toMap)
+          complete {
+            Try(ScalaFormatter.format(
+              source = source.get,
+              scalaVersion = version,
+              formattingPreferences = preferences,
+              initialIndentLevel = indentLevel))
+          }
+        }
       }
     }
 }
