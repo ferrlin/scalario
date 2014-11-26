@@ -57,7 +57,7 @@ object FormattingService {
   val SCALA_VERSION = "scalaVersion"
   val INDENT_LEVEL = "initialIndentLevel"
 
-  def formatPreferences(params: Map[String, String]) =
+  def formatPreferences(implicit params: Map[String, String]) =
     AllPreferences.preferencesByKey map {
       case (key, descriptor) ⇒ {
         val setting = descriptor match {
@@ -79,11 +79,11 @@ trait FormattingService extends HttpService {
 
   def formatRoute =
     entity(as[FormData]) { formData ⇒
-      val allParams = formData.fields.toMap
+      implicit val allParams = formData.fields.toMap
       val source = allParams get SOURCE_FIELD
       val version = allParams getOrElse (SCALA_VERSION, "2.10")
       val Some(indentLevel: Int) = Some((allParams getOrElse (INDENT_LEVEL, "0")) toInt)
-      lazy val preferences = new FormattingPreferences(formatPreferences(allParams).toMap)
+      lazy val preferences = new FormattingPreferences(formatPreferences.toMap)
       complete {
         Try(ScalaFormatter.format(
           source = source.get,
