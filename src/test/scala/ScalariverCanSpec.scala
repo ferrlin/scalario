@@ -1,4 +1,3 @@
-
 package org.scalariver
 
 import org.specs2.mutable.Specification
@@ -11,34 +10,38 @@ class ScalariverCanSpec extends Specification with Specs2RouteTest with Formatti
   def actorRefFactory = system
   val myRoute = formatRoute
 
-  val test1 = """
-  object Test {
-    val map = Map("hello" -> "yoh")
-  }
-  """
+  val test2 =
+    """|object Test {
+|  def sayYes(ans: String) = p match {
+|    case "Yes" => "I'm saying yes!"
+|    case _ => "Nothing to say..."
+|  }
+|}""".stripMargin
 
-  val test2 = """
-  object Test2 {
-    def sayYes(p: String) = p match {
-      case "Yes" => "Im saying yes"
-      case _ => "Nah,"
-    }
-  }
-  """
-  val expTest2 = """
-  object Test2 {
-    def sayYes(p: String) = p match {
-      case "Yes" ⇒ "Im saying yes"
-      case _ ⇒ "Nah,"
-    }
-  }"""
+  val expTest2 =
+    """|object Test {
+|  def sayYes(ans: String) = p match {
+|    case "Yes" ⇒ "I'm saying yes!"
+|    case _ ⇒ "Nothing to say..."
+|  }
+|}""".stripMargin
 
   "The service" should {
-    "return formatted source code" in {
-      Post("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "2", "rewriteArrowSymbols" -> "true"))) ~>
+    "response to a POST request and return a formatted source code" in {
+      Post("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "0", "rewriteArrowSymbols" -> "true"))) ~>
         myRoute ~> check {
           val output = responseAs[String]
           println(output)
+          output === expTest2
+        }
+    }
+  }
+
+  "The service" should {
+    "not response to a GET request and return formatted source code" in {
+      Get("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "2", "rewriteArrowSymbols" -> "true"))) ~>
+        myRoute ~> check {
+          val output = responseAs[String]
           output === expTest2
         }
     }
