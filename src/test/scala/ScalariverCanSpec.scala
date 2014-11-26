@@ -36,9 +36,6 @@ class ScalariverCanSpec extends Specification with Specs2RouteTest with Formatti
           output === expTest2
         }
     }
-  }
-
-  "The service" should {
     "not respond to a GET request" in {
       Get("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "2", "rewriteArrowSymbols" -> "true"))) ~>
         myRoute ~> check {
