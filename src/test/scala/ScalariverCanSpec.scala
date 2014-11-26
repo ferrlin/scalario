@@ -28,16 +28,18 @@ class ScalariverCanSpec extends Specification with Specs2RouteTest with Formatti
 |  }
 |}""".stripMargin
 
+  val data = Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "0", "rewriteArrowSymbols" -> "true")
+
   "The service" should {
     "response to a POST request and return a formatted source code" in {
-      Post("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "0", "rewriteArrowSymbols" -> "true"))) ~>
+      Post("/", FormData(data)) ~>
         myRoute ~> check {
           val output = responseAs[String]
           output === expTest2
         }
     }
     "not respond to a GET request" in {
-      Get("/", FormData(Map("source" -> test2, "scalaVersion" -> "2.11.2", "initialIndentLevel" -> "2", "rewriteArrowSymbols" -> "true"))) ~>
+      Get("/", FormData(data)) ~>
         myRoute ~> check {
           rejections === List(MethodRejection(POST))
         }

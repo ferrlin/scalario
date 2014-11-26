@@ -4,16 +4,13 @@ import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
 import spray.can.Http
 
-object ScalariverCan extends App {
+object Boot extends App {
 
   implicit val river = ActorSystem("Scalariver")
 
-  val handler = river.actorOf(Props[FormattingHandler], name = "formatter")
-  val staticHandler = river.actorOf(Props[StaticHandler], name = "static")
+  val handler = river.actorOf(Props[ScalariverHandler], name = "scalariver")
 
   IO(Http) ! Http.Bind(handler, interface = "localhost", port = 8098)
-
-  // IO(Http) ! Http.Bind(staticHandler, interface = "localhost", port = 8098)
 
 }
 
@@ -26,26 +23,24 @@ import scala.util.{ Try, Success, Failure }
 /**
  * Handler Actor registered to spray-can for formatting services.
  */
-class FormattingHandler extends Actor with FormattingService with ActorLogging {
+class ScalariverHandler extends Actor
+  with FormattingService
+  with StaticContentService
+  with ActorLogging {
   implicit val timeout: Timeout = 1.second
   def actorRefFactory = context
+// def receive = runRoute(formatRoute ~ staticRoute)
   def receive = runRoute(formatRoute)
 }
 
-import spray.routing.HttpServiceActor
-/**
- * Handler Actor for static files found in app's resources folder
- */
-class StaticHandler extends HttpServiceActor with ActorLogging {
+import spray.routing.HttpService
 
-  def receive = runRoute {
-    path("/index") {
-      getFromResource("index.html")
-    }
+trait StaticContentService extends HttpService {
+  def staticRoute = path("index") {
+    getFromResource("index.html")
   }
 }
 
-import spray.routing.HttpService
 import scalariform.formatter.preferences._
 import scalariform.formatter.ScalaFormatter
 
