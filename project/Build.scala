@@ -1,7 +1,10 @@
 import sbt._, Keys._
 import com.typesafe.sbt.SbtStartScript
+import spray.revolver.RevolverPlugin._
 
 object ScalariverProject extends Build {
+
+  Revolver.settings
 
   val scalariver = Project("scalariver", file(".")).settings(
     organization := "com.github.ornicar",
