@@ -10,7 +10,7 @@ object Boot extends App {
 
   val handler = river.actorOf(Props[ScalariverHandler], name = "scalariver")
 
-  IO(Http) ! Http.Bind(handler, interface = "localhost", port = 8098)
+  IO(Http) ! Http.Bind(handler, interface = "localhost", port = 8099)
 
 }
 
@@ -29,16 +29,15 @@ class ScalariverHandler extends Actor
   with ActorLogging {
   implicit val timeout: Timeout = 1.second
   def actorRefFactory = context
-// def receive = runRoute(formatRoute ~ staticRoute)
-  def receive = runRoute(formatRoute)
+  def receive = runRoute(formatRoute ~ staticRoute)
 }
 
 import spray.routing.HttpService
 
 trait StaticContentService extends HttpService {
-  def staticRoute = path("index") {
+  def staticRoute = path("") {
     getFromResource("index.html")
-  }
+  } ~ getFromResourceDirectory("")
 }
 
 import scalariform.formatter.preferences._
@@ -67,7 +66,6 @@ object FormattingService {
       }
     }
 }
-
 trait FormattingService extends HttpService {
   implicit def executionContext = actorRefFactory.dispatcher
   import FormattingService._
