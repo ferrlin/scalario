@@ -10,8 +10,12 @@ object Boot extends App {
 
   val handler = river.actorOf(Props[ScalariverHandler], name = "scalariver")
 
-  IO(Http) ! Http.Bind(handler, interface = "localhost", port = 8099)
+  import com.typesafe.config._
+  val conf = ConfigFactory.load()
+  val serverPort = conf.getInt("port")
+  val server = conf.getString("interface")
 
+  IO(Http) ! Http.Bind(handler, interface = server, port = serverPort)
 }
 
 import akka.actor.{ Actor, ActorLogging }
