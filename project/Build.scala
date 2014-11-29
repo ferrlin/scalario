@@ -24,7 +24,7 @@ object ScalariverProject extends Build {
       "com.typesafe.akka" %% "akka-slf4j" % "2.3.6",
       "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
       "io.spray" %% "spray-testkit" % "1.3.2" % "test",
-      "org.scalariform" %% "scalariform" % "0.1.4",
+      "org.scalariform" %% "scalariform" % "0.1.4"),
     resolvers := Seq(
       "sonatype" at "http://oss.sonatype.org/content/repositories/releases",
       "sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"),
