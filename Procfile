@@ -1,1 +1,1 @@
-web: sbt run one-jar
+web: target/start Web
