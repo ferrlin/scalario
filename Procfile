@@ -1,1 +1,1 @@
-web: target/start org.scalariver.Boot.scala 
+web: target/start Web 
