@@ -11,8 +11,9 @@ object Boot extends App {
   val handler = river.actorOf(Props[ScalariverHandler], name = "scalariver")
 
   import com.typesafe.config._
+  import util.Properties
+  val serverPort = Properties.envOrElse("PORT", "8080").toInt
   val conf = ConfigFactory.load()
-  val serverPort = conf.getInt("port")
   val server = conf.getString("interface")
 
   IO(Http) ! Http.Bind(handler, interface = server, port = serverPort)
