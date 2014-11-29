@@ -15,7 +15,6 @@ object ScalariverProject extends Build {
     resolvers := Seq(
       "sonatype" at "http://oss.sonatype.org/content/repositories/releases",
       "sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"),
-    scalacOptions := Seq("-deprecation", "-unchecked", "-feature", "-language:_")
-  ).settings(com.github.retronym.SbtOneJar.oneJarSettings: _*)
-  .settings(SbtStartScript.startScriptForJarSettings: _*)
+    scalacOptions := Seq("-deprecation", "-unchecked", "-feature", "-language:_")).settings(com.github.retronym.SbtOneJar.oneJarSettings: _*)
+    .settings(SbtStartScript.startScriptForJarSettings: _*)
 }
