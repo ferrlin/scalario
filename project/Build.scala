@@ -1,4 +1,5 @@
 import sbt._, Keys._
+import com.typesafe.sbt.SbtStartScript
 
 object ScalariverProject extends Build {
 
@@ -16,4 +17,5 @@ object ScalariverProject extends Build {
       "sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"),
     scalacOptions := Seq("-deprecation", "-unchecked", "-feature", "-language:_")
   ).settings(com.github.retronym.SbtOneJar.oneJarSettings: _*)
+  .settings(SbtStartScript.startScriptForJarSettings: _*)
 }
