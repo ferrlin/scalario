@@ -16,7 +16,7 @@ object ScalariverProject extends Build {
     mainClass := Some("org.scalariver.Boot"),
     version := "1.0",
     scalaVersion := "2.10.4",
-    resourceDirectories in Compile := List(),
+  resourceDirectories in Compile := List(),
     libraryDependencies := Seq(
       "io.spray" %% "spray-can" % "1.3.2",
       "io.spray" %% "spray-routing" % "1.3.2",
@@ -25,7 +25,6 @@ object ScalariverProject extends Build {
       "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
       "io.spray" %% "spray-testkit" % "1.3.2" % "test",
       "org.scalariform" %% "scalariform" % "0.1.4",
-      "org.gnieh" %% "tiscaf" % "0.8"),
     resolvers := Seq(
       "sonatype" at "http://oss.sonatype.org/content/repositories/releases",
       "sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"),
