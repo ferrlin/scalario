@@ -18,7 +18,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.*/
+THE SOFTWARE.
+*/
 package org.scalariver
 
 import akka.actor.{ ActorSystem, Props }
@@ -45,13 +46,14 @@ import scala.concurrent.duration._
 import akka.util.Timeout
 import scala.util.{ Try, Success, Failure }
 
+/**
+ * Handler Actor registered to spray-can for formatting services.
+ */
+
 object ScalariverHandler {
   def props: Props = Props[ScalariverHandler]
 }
 
-/**
- * Handler Actor registered to spray-can for formatting services.
- */
 class ScalariverHandler extends Actor
   with FormattingService
   with StaticContentService
@@ -80,7 +82,7 @@ object FormattingService {
   val SCALA_VERSION = "scalaVersion"
   val INDENT_LEVEL = "initialIndentLevel"
 
-  def formatPreferences(implicit params: Map[String, String]): Map[PreferenceDescriptor[_], Any] =
+  def formatPreferences(implicit params: Map[String, String]) =
     AllPreferences.preferencesByKey map {
       case (key, descriptor) ⇒ {
         val setting = descriptor match {
