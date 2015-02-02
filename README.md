@@ -1,4 +1,5 @@
-## 
+### Scalariver with spray-can 
+[![Build Status](https://travis-ci.org/ferrlin/scalariver.svg)](https://travis-ci.org/ferrlin/scalariver)
 
 This is a fork of scalariver found here: https://github.com/ornicar/scalariver.
 
