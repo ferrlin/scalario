@@ -7,22 +7,19 @@ object ScalariverProject extends Build {
 
   Revolver.settings
 
-  // mainClass in oneJar := Some("org.scalariver.Boot")
-
   val scalariver = Project("scalariver", file(".")).settings(
-    // organization := "com.github.ornicar",
     organization := "org.scalariver",
     name := "scalariver",
     mainClass := Some("org.scalariver.Boot"),
     version := "1.0",
     scalaVersion := "2.10.4",
-  resourceDirectories in Compile := List(),
+    resourceDirectories in Compile := List(),
     libraryDependencies := Seq(
       "io.spray" %% "spray-can" % "1.3.2",
       "io.spray" %% "spray-routing" % "1.3.2",
-      "com.typesafe.akka" %% "akka-actor" % "2.3.6",
-      "com.typesafe.akka" %% "akka-slf4j" % "2.3.6",
-      "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
+      "com.typesafe.akka" %% "akka-actor" % "2.3.8",
+      "com.typesafe.akka" %% "akka-slf4j" % "2.3.8",
+      "com.typesafe.akka" %% "akka-testkit" % "2.3.8" % "test",
       "io.spray" %% "spray-testkit" % "1.3.2" % "test",
       "org.scalariform" %% "scalariform" % "0.1.4"),
     resolvers := Seq(
