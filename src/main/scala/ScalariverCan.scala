@@ -28,16 +28,27 @@ import spray.can.Http
 
 object Boot extends App {
 
-  implicit val river = ActorSystem("Scalariver")
+  implicit lazy val river = ActorSystem("scalariver")
   val handler = river.actorOf(ScalariverHandler.props, name = "scalariver")
 
-  import com.typesafe.config._
   import util.Properties
-  val serverPort = Properties.envOrElse("PORT", "8080").toInt
-  val conf = ConfigFactory.load()
-  val server = conf.getString("interface")
+  import com.typesafe.config._
+  import spray.http.Uri
 
-  IO(Http) ! Http.Bind(handler, interface = server, port = serverPort)
+  sys.addShutdownHook(river.shutdown())
+
+  lazy val conf = ConfigFactory.load()
+  val (host, port) = Properties.envOrNone("SCALARIVER_URL") match {
+    case Some(strUrl) ⇒
+      val uri = Uri(strUrl)
+      (uri.authority.host.address, uri.authority.port)
+    case None ⇒
+      val host = conf.getString("server.host")
+      val port = conf.getInt("server.port")
+      (host, port)
+  }
+
+  IO(Http) ! Http.Bind(handler, interface = host, port = port)
 }
 
 import akka.actor.{ Actor, ActorLogging, ActorRefFactory }
