@@ -54,11 +54,21 @@ object ScalariverHandler {
   def props: Props = Props[ScalariverHandler]
 }
 
+import spray.util.LoggingContext
+import spray.http.StatusCodes._
+import spray.routing._
+
 class ScalariverHandler extends Actor
   with FormattingService
   with StaticContentService
   with ActorLogging {
   implicit val timeout: Timeout = 1.second
+  implicit def formattingExceptionHandler(implicit log: LoggingContext) =
+    ExceptionHandler {
+      case e: Exception ⇒
+        log.warning("Exception thrown:", e.getMessage())
+        complete(InternalServerError, "Scalariform formatting problem")
+    }
   def actorRefFactory = context
   def receive = runRoute(formatRoute ~ staticRoute)
 }
