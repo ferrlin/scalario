@@ -35,8 +35,6 @@ object Boot extends App {
   import com.typesafe.config._
   import spray.http.Uri
 
-  sys.addShutdownHook(river.shutdown())
-
   lazy val conf = ConfigFactory.load()
   val (host, port) = Properties.envOrNone("SCALARIVER_URL") match {
     case Some(strUrl) ⇒
@@ -49,6 +47,7 @@ object Boot extends App {
   }
 
   IO(Http) ! Http.Bind(handler, interface = host, port = port)
+  sys.addShutdownHook(river.shutdown())
 }
 
 import akka.actor.{ Actor, ActorLogging, ActorRefFactory }
@@ -60,7 +59,6 @@ import scala.util.{ Try, Success, Failure }
 /**
  * Handler Actor registered to spray-can for formatting services.
  */
-
 object ScalariverHandler {
   def props: Props = Props[ScalariverHandler]
 }
@@ -74,20 +72,20 @@ class ScalariverHandler extends Actor
   with StaticContentService
   with ActorLogging {
   implicit val timeout: Timeout = 1.second
-  implicit def formattingExceptionHandler(implicit log: LoggingContext) =
+  implicit def formattingExceptionHandler(implicit log: LoggingContext): ExceptionHandler =
     ExceptionHandler {
       case e: Exception ⇒
         log.warning("Exception thrown:", e.getMessage())
         complete(InternalServerError, "Scalariform formatting problem")
     }
-  def actorRefFactory = context
-  def receive = runRoute(formatRoute ~ staticRoute)
+  def actorRefFactory: ActorRefFactory = context
+  def receive: Receive = runRoute(formatRoute ~ staticRoute)
 }
 
 import spray.routing.HttpService
 
 trait StaticContentService extends HttpService {
-  def staticRoute = path("") {
+  def staticRoute: Route = path("") {
     getFromResource("index.html")
   } ~ getFromResourceDirectory("")
 }
@@ -122,13 +120,13 @@ trait FormattingService extends HttpService {
   implicit def executionContext = actorRefFactory.dispatcher
   import FormattingService._
 
-  def formatRoute =
+  def formatRoute: Route =
     path("") {
       post {
         entity(as[FormData]) { formData ⇒
           implicit val allParams = formData.fields.toMap
           val source = allParams get SOURCE_FIELD
-          val version = allParams getOrElse (SCALA_VERSION, "2.10")
+          val version = allParams getOrElse (SCALA_VERSION, "2.10.5")
           val Some(indentLevel: Int) = Some((allParams getOrElse (INDENT_LEVEL, "0")) toInt)
           lazy val preferences = new FormattingPreferences(formatPreferences.toMap)
           complete {

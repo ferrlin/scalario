@@ -5,26 +5,28 @@ import com.github.retronym.SbtOneJar.oneJarSettings
 
 object ScalariverProject extends Build {
 
+  import Dependencies._
+  import Libraries._
+
   Revolver.settings
 
   val scalariver = Project("scalariver", file(".")).settings(
     organization := "org.scalariver",
     name := "scalariver",
     mainClass := Some("org.scalariver.Boot"),
-    version := "1.0",
-    scalaVersion := "2.10.4",
+    version := "1.1",
+    scalaVersion := "2.10.5",
     resourceDirectories in Compile := List(),
     libraryDependencies := Seq(
-      "io.spray" %% "spray-can" % "1.3.2",
-      "io.spray" %% "spray-routing" % "1.3.2",
-      "com.typesafe.akka" %% "akka-actor" % "2.3.8",
-      "com.typesafe.akka" %% "akka-slf4j" % "2.3.8",
-      "com.typesafe.akka" %% "akka-testkit" % "2.3.8" % "test",
-      "io.spray" %% "spray-testkit" % "1.3.2" % "test",
-      "org.scalariform" %% "scalariform" % "0.1.4"),
-    resolvers := Seq(
-      "sonatype" at "http://oss.sonatype.org/content/repositories/releases",
-      "sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"),
+      sprayCan,
+      sprayRouting,
+      akka,
+      akkaLog,
+      akkaTestKit,
+      sprayTestKit,
+      scalariform,
+      swagger),
+    resolvers := resolutionRepos,
     scalacOptions := Seq("-deprecation", "-unchecked", "-feature", "-language:_")).settings(com.github.retronym.SbtOneJar.oneJarSettings: _*)
     .settings(SbtStartScript.startScriptForJarSettings: _*)
 }
