@@ -1,4 +1,4 @@
-package org.scalariver
+package org.scalario
 
 import org.specs2.mutable.Specification
 import spray.testkit.Specs2RouteTest
@@ -7,7 +7,7 @@ import spray.http.FormData
 import spray.routing.MethodRejection
 import spray.http.HttpMethods._
 
-class ScalariverCanSpec extends Specification with Specs2RouteTest with FormattingService {
+class ScalarioSpec extends Specification with Specs2RouteTest with FormattingService {
 
   def actorRefFactory = system
   val myRoute = formatRoute
