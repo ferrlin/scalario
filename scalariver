@@ -13,7 +13,8 @@ require 'optparse'
 # export SCALARIVER_URL="http://localhost:8098"
 # or pass it as an option:
 # scalariver --url=http://localhost:8098
-DEFAULT_URL = "http://river.scalex.org"
+# DEFAULT_URL = "http://river.scalex.org"
+DEFAULT_URL = "http://scalario.herokuapp.com"
 
 def http_connection(uri)
   env = ENV['http_proxy'] || ENV['HTTP_PROXY']
@@ -42,7 +43,7 @@ rescue Timeout::Error
 end
 
 options = {}
-options['url'] = ENV["SCALARIVER_URL"] || DEFAULT_URL
+options['url'] = ENV["SCALARIO_URL"] || DEFAULT_URL
 booleanPreferences = [ 'alignParameters', 'rewriteArrowSymbols', 'alignParameters', 'alignSingleLineCaseStatements', 'compactControlReadability', 'compactStringConcatenation', 'doubleIndentClassDeclaration', 'formatXml', 'indentLocalDefs', 'indentPackageBlocks', 'indentWithTabs', 'multilineScaladocCommentsStartOnFirstLine', 'placeScaladocAsterisksBeneathSecondAsterisk', 'preserveDanglingCloseParenthesis', 'preserveSpaceBeforeArguments', 'rewriteArrowSymbols', 'spaceBeforeColon', 'spaceInsideBrackets', 'spaceInsideParentheses', 'spacesWithinPatternBinders']
 booleanPreferences.each do |o|
   [['+', true], ['-', false]].each do |arr|

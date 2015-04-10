@@ -6,8 +6,8 @@ object BuildSettings {
   // Basic settings for our app
   lazy val basicSettings = Seq[Setting[_]](
     //format: OFF
-    organization          :=  "org.scalariver",
-    mainClass             :=  Some("org.scalariver.Boot"),
+    organization          :=  "org.scalario",
+    mainClass             :=  Some("org.scalario.Boot"),
     version               :=  "1.1",
     description           :=  "a server for scalariform",
     scalaVersion          :=  "2.10.5",
@@ -30,7 +30,7 @@ object BuildSettings {
   import scalariform.formatter.preferences._
   def formattingPreferences =
     FormattingPreferences()
-      .setPreference(RewriteArrowSymbols, false)
+      .setPreference(RewriteArrowSymbols, true)
       .setPreference(AlignParameters, true)
       .setPreference(AlignSingleLineCaseStatements, true)
       .setPreference(DoubleIndentClassDeclaration, true)

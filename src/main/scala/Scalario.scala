@@ -20,7 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package org.scalariver
+package org.scalario
 
 import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
@@ -28,15 +28,15 @@ import spray.can.Http
 
 object Boot extends App {
 
-  implicit lazy val river = ActorSystem("scalariver")
-  val handler = river.actorOf(ScalariverHandler.props, name = "scalariver")
+  implicit lazy val river = ActorSystem("rio-system")
+  val handler = river.actorOf(ScalarioHandler.props, name = "scalario")
 
   import util.Properties
   import com.typesafe.config._
   import spray.http.Uri
 
   lazy val conf = ConfigFactory.load()
-  val (host, port) = Properties.envOrNone("SCALARIVER_URL") match {
+  val (host, port) = Properties.envOrNone("SCALARIO_URL") match {
     case Some(strUrl) ⇒
       val uri = Uri(strUrl)
       (uri.authority.host.address, uri.authority.port)
@@ -59,18 +59,18 @@ import scala.util.{ Try, Success, Failure }
 /**
  * Handler Actor registered to spray-can for formatting services.
  */
-object ScalariverHandler {
-  def props: Props = Props[ScalariverHandler]
+object ScalarioHandler {
+  def props: Props = Props[ScalarioHandler]
 }
 
 import spray.util.LoggingContext
 import spray.http.StatusCodes._
 import spray.routing._
 
-class ScalariverHandler extends Actor
-  with FormattingService
-  with StaticContentService
-  with ActorLogging {
+class ScalarioHandler extends Actor
+    with FormattingService
+    with StaticContentService
+    with ActorLogging {
   implicit val timeout: Timeout = 1.second
   implicit def formattingExceptionHandler(implicit log: LoggingContext): ExceptionHandler =
     ExceptionHandler {
@@ -117,6 +117,7 @@ object FormattingService {
     }
 }
 trait FormattingService extends HttpService {
+  import scala.language.postfixOps
   implicit def executionContext = actorRefFactory.dispatcher
   import FormattingService._
 

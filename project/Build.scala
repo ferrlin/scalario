@@ -1,7 +1,7 @@
 import sbt._
 import Keys._
 
-object ScalariverProject extends Build {
+object ScalarioProject extends Build {
   import com.typesafe.sbt.SbtStartScript
   // import spray.revolver.RevolverPlugin._
   import com.github.retronym.SbtOneJar.oneJarSettings
@@ -17,7 +17,7 @@ object ScalariverProject extends Build {
 
   // Define our project, with basic project information and library
   // dependencies.
-  lazy val project = Project("scalariver", file("."))
+  lazy val project = Project("scalario", file("."))
     .settings(buildSettings: _*)
     .settings(com.github.retronym.SbtOneJar.oneJarSettings: _*)
     .settings(SbtStartScript.startScriptForJarSettings: _*)
